@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Configuración de la conexión a la base de datos MySQL (Ajustar según tu entorno) -->
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3030/gestion_peliculas?serverTimezone=UTC</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">root</property>
+
+        <!-- Dialecto de SQL -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- Muestra las sentencias SQL generadas por Hibernate -->
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+
+        <!-- Configuración DDL: Crea las tablas si no existen (solo para desarrollo) -->
+        <!-- Usar 'update' para mantener datos existentes -->
+        <property name="hbm2ddl.auto">update</property>
+
+        <!-- Mapeo de Entidades -->
+        <mapping class="org.example.reto2.Model.Usuario"/>
+        <mapping class="org.example.reto2.Model.Pelicula"/>
+        <mapping class="org.example.reto2.Model.Copia"/>
+    </session-factory>
+</hibernate-configuration>

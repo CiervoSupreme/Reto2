@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.obiscr.chatgpt.settings.EasyCodeState">
+    <option name="projectFiles" value="$PROJECT_DIR$/src/main/java/org/example/reto2/controller/LoginController.java;C:/Users/Hodori/Downloads/Reto2/src/main/java/org/example/reto2/controller/PrincipalController.java;C:/Users/Hodori/Downloads/Reto2/src/main/java/org/example/reto2/dao/CopiaDAO.java;C:/Users/Hodori/Downloads/Reto2/src/main/java/org/example/reto2/dao/UsuarioDAO.java;C:/Users/Hodori/Downloads/Reto2/src/main/java/org/example/reto2/Model/Copia.java;C:/Users/Hodori/Downloads/Reto2/src/main/java/org/example/reto2/Model/Pelicula.java;C:/Users/Hodori/Downloads/Reto2/src/main/java/org/example/reto2/Model/Usuario.java;C:/Users/Hodori/Downloads/Reto2/src/main/java/org/example/reto2/Util/AppSession.java;C:/Users/Hodori/Downloads/Reto2/src/main/java/org/example/reto2/Util/HibernateUtil.java;C:/Users/Hodori/Downloads/Reto2/src/main/java/org/example/reto2/MainApp.java;C:/Users/Hodori/Downloads/Reto2/src/main/java/module-info.java" />
+  </component>
+</project>
