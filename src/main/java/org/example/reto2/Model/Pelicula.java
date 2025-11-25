@@ -14,7 +14,7 @@ public class Pelicula {
     private String titulo;
 
     private String genero;
-    private int ano; // Año
+    private int ano;
     private String descripcion;
     private String director;
 
@@ -28,7 +28,6 @@ public class Pelicula {
         this.director = director;
     }
 
-    // Getters y Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getTitulo() { return titulo; }

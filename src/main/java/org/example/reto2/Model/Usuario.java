@@ -19,7 +19,7 @@ public class Usuario {
     private String contrasena;
 
     @Column(name = "es_admin")
-    private boolean esAdministrador; // Para la historia de usuario del administrador
+    private boolean esAdministrador;
 
     public Usuario() {}
 
@@ -29,7 +29,6 @@ public class Usuario {
         this.esAdministrador = esAdministrador;
     }
 
-    // Getters y Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getNombreUsuario() { return nombreUsuario; }

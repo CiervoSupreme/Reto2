@@ -34,8 +34,8 @@ public class PrincipalController {
 
         // Configurar columnas
         colTitulo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getTituloPelicula()));
-        colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
-        colSoporte.setCellValueFactory(new PropertyValueFactory<>("soporte"));
+        colEstado.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getEstado()));
+        colSoporte.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getSoporte()));
 
         tvCopias.setItems(listaCopias);
 
@@ -45,7 +45,6 @@ public class PrincipalController {
 
         cargarCopias();
 
-        // Doble clic para ver detalle/modificar
         tvCopias.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 Copia selectedCopia = tvCopias.getSelectionModel().getSelectedItem();
@@ -97,7 +96,7 @@ public class PrincipalController {
 
     @FXML
     private void handleAnadirCopia() {
-        // Implementar la lógica para añadir una nueva copia
+        // Añadir una nueva copia
         mostrarDialogoNuevaCopia();
     }
 
@@ -111,7 +110,6 @@ public class PrincipalController {
     }
 
     private void mostrarVentanaDetalle(Copia copia) {
-        // Implementación simplificada: Muestra un diálogo de edición
         Dialog<Copia> dialog = new Dialog<>();
         dialog.setTitle("Detalle y Edición de Copia");
         dialog.setHeaderText("Modificar copia de: " + copia.getTituloPelicula() + " (ID: " + copia.getId() + ")");
@@ -154,7 +152,7 @@ public class PrincipalController {
     }
 
     private void mostrarDialogoNuevaCopia() {
-        // Diálogo para añadir una nueva copia de una película existente
+        // Añadir una nueva copia de una película existente
         Dialog<Copia> dialog = new Dialog<>();
         dialog.setTitle("Añadir Nueva Copia");
         dialog.setHeaderText("Selecciona película y define los detalles de la copia.");

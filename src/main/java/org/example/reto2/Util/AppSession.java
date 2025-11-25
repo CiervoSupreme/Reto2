@@ -1,7 +1,6 @@
 package org.example.reto2.Util;
 import org.example.reto2.Model.Usuario;
 
-// Clase Singleton para mantener el estado de la sesión del usuario
 public class AppSession {
 
     private static Usuario usuarioActual;

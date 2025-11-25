@@ -8,26 +8,22 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-// Importar la utilidad de Hibernate
 import org.example.reto2.Util.HibernateUtil;
 
 public class MainApp extends Application {
 
     private static Stage primaryStage;
 
-    // Nombres de archivos FXML. Asegúrate de que existan en src/main/resources/org/example/reto2/
     private static final String FXML_LOGIN = "login-view.fxml";
-    private static final String FXML_PRINCIPAL = "main-view.fxml"; // Asumido para la navegación
+    private static final String FXML_PRINCIPAL = "main-view.fxml";
 
     @Override
     public void start(Stage stage) throws Exception {
-        // Inicializa la fábrica de sesiones de Hibernate
         HibernateUtil.getSessionFactory();
 
         primaryStage = stage;
         primaryStage.setTitle("Gestor de Colección de Películas");
 
-        // Llamamos al método estático para mostrar la vista de Login
         mostrarLogin();
     }
 
@@ -41,12 +37,10 @@ public class MainApp extends Application {
             return;
         }
 
-        // Buscar el recurso FXML dentro del mismo paquete de MainApp
         URL fxmlUrl = MainApp.class.getResource(FXML_LOGIN);
 
         if (fxmlUrl == null) {
             System.err.println("¡ERROR CRÍTICO! No se pudo encontrar el archivo FXML: " + FXML_LOGIN);
-            // El controlador debe capturar esta IOException
             throw new IOException("FXML resource not found: " + FXML_LOGIN);
         }
 
@@ -91,15 +85,13 @@ public class MainApp extends Application {
         if (primaryStage != null) {
             primaryStage.close();
         }
-        // Detiene la aplicación JavaFX
-        // System.exit(0); // Optional: if you want to ensure the JVM shuts down immediately.
+
     }
 
     public static void main(String[] args) {
         launch(args);
     }
 
-    // Método para obtener el Stage principal
     public static Stage getPrimaryStage() {
         return primaryStage;
     }

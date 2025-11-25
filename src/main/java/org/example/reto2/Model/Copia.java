@@ -18,8 +18,8 @@ public class Copia {
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
-    private String estado; // e.g., "bueno", "dañado"
-    private String soporte; // e.g., "DVD", "Blu-ray", "VHS"
+    private String estado;
+    private String soporte;
 
     public Copia() {}
 
@@ -30,7 +30,6 @@ public class Copia {
         this.soporte = soporte;
     }
 
-    // Getters y Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public Pelicula getPelicula() { return pelicula; }
@@ -42,7 +41,6 @@ public class Copia {
     public String getSoporte() { return soporte; }
     public void setSoporte(String soporte) { this.soporte = soporte; }
 
-    // Propiedades convenientes para la TableView
     public String getTituloPelicula() {
         return pelicula != null ? pelicula.getTitulo() : "N/A";
     }

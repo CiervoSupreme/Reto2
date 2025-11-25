@@ -40,7 +40,6 @@ public class CopiaDAO {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            // Verificar que la copia pertenezca al usuario actual antes de eliminar (Integridad)
             if (copia != null && copia.getUsuario().getId() == copia.getUsuario().getId()) {
                 session.delete(copia);
                 transaction.commit();
@@ -54,7 +53,6 @@ public class CopiaDAO {
         }
     }
 
-    // Método para la historia de usuario "Añadir nueva película" (solo admin)
     public void guardarPelicula(Pelicula pelicula) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -67,7 +65,6 @@ public class CopiaDAO {
         }
     }
 
-    // Método auxiliar para obtener todas las películas para el ComboBox de añadir copia
     public List<Pelicula> obtenerTodasLasPeliculas() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM Pelicula p ORDER BY p.titulo", Pelicula.class).list();
