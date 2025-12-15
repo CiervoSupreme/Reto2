@@ -24,6 +24,37 @@ public class CopiaDAO {
         }
     }
 
+    public List<String> obtenerValoresDistintos(String columna, Usuario usuario) {
+        String hql = String.format("SELECT DISTINCT c.%s FROM Copia c WHERE c.usuario.id = :userId ORDER BY c.%s", columna, columna);
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<String> query = session.createQuery(hql, String.class);
+            query.setParameter("userId", usuario.getId());
+            return query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
+    public List<Copia> filtrarCopias(Usuario usuario, String estado, String soporte) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            StringBuilder hql = new StringBuilder("FROM Copia c WHERE c.usuario.id = :userId");
+            if (estado != null) hql.append(" AND c.estado = :estado");
+            if (soporte != null) hql.append(" AND c.soporte = :soporte");
+            hql.append(" ORDER BY c.pelicula.titulo");
+
+            Query<Copia> query = session.createQuery(hql.toString(), Copia.class);
+            query.setParameter("userId", usuario.getId());
+            if (estado != null) query.setParameter("estado", estado);
+            if (soporte != null) query.setParameter("soporte", soporte);
+
+            return query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
     public void guardarCopia(Copia copia) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

@@ -1,24 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-
 <?import javafx.scene.control.Button?>
-
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-
 <?import javafx.scene.control.TableColumn?>
-
 <?import javafx.scene.control.TableView?>
-
 <?import javafx.scene.layout.BorderPane?>
-
 <?import javafx.scene.layout.HBox?>
-
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ecf0f1;" xmlns="https://www.google.com/search?q=http://javafx.com/javafx/17" xmlns:fx="https://www.google.com/search?q=http://javafx.com/fxml/1" fx:controller="org.example.reto2.controller.PrincipalController">
+<BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.reto2.controller.PrincipalController">
     <top>
         <VBox alignment="CENTER_LEFT" spacing="5.0" style="-fx-background-color: #2c3e50; -fx-padding: 15;" BorderPane.alignment="CENTER">
             <children>
@@ -38,6 +31,15 @@
     <center>
         <VBox spacing="10.0" BorderPane.alignment="CENTER">
             <children>
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <children>
+                        <Label text="Filtrar por:" />
+                        <ComboBox fx:id="comboEstado" promptText="Estado" />
+                        <ComboBox fx:id="comboSoporte" promptText="Soporte" />
+                        <Button onAction="#handleFiltrar" text="Filtrar" />
+                        <Button onAction="#handleLimpiarFiltros" text="Limpiar" />
+                    </children>
+                </HBox>
                 <Label text="Listado de Copias (Doble Clic para Detalle/Modificar)" textFill="#34495e">
                     <font>
                         <Font name="System Italic" size="12.0" />

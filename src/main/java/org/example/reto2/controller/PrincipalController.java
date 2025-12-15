@@ -1,19 +1,21 @@
 package org.example.reto2.controller;
 
-import javafx.scene.layout.GridPane;
-import org.example.reto2.MainApp;
-import org.example.reto2.dao.CopiaDAO;
-import org.example.reto2.Model.Copia;
-import org.example.reto2.Model.Pelicula;
-import org.example.reto2.Util.AppSession;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
+import org.example.reto2.MainApp;
+import org.example.reto2.Util.AppSession;
+import org.example.reto2.dao.CopiaDAO;
+import org.example.reto2.Model.Copia;
+import org.example.reto2.Model.Pelicula;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class PrincipalController {
 
@@ -23,6 +25,8 @@ public class PrincipalController {
     @FXML private TableColumn<Copia, String> colTitulo;
     @FXML private TableColumn<Copia, String> colEstado;
     @FXML private TableColumn<Copia, String> colSoporte;
+    @FXML private ComboBox<String> comboEstado;
+    @FXML private ComboBox<String> comboSoporte;
 
     private final CopiaDAO copiaDAO = new CopiaDAO();
     private final ObservableList<Copia> listaCopias = FXCollections.observableArrayList();
@@ -32,18 +36,17 @@ public class PrincipalController {
         lblUsuario.setText("Colección de: " + AppSession.getUsuarioActual().getNombreUsuario() +
                 (AppSession.isAdmin() ? " (ADMIN)" : ""));
 
-        // Configurar columnas
         colTitulo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getTituloPelicula()));
         colEstado.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getEstado()));
         colSoporte.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getSoporte()));
 
         tvCopias.setItems(listaCopias);
 
-        // Mostrar u ocultar el botón de administrador
         btnNuevaPelicula.setVisible(AppSession.isAdmin());
         btnNuevaPelicula.setManaged(AppSession.isAdmin());
 
         cargarCopias();
+        configurarFiltros();
 
         tvCopias.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
@@ -53,6 +56,41 @@ public class PrincipalController {
                 }
             }
         });
+    }
+
+    /**
+     * Ahora es posible filtrar por estado y soporte asi como limpiar los filtros.
+     */
+
+    private void configurarFiltros() {
+        comboEstado.getItems().clear();
+        comboSoporte.getItems().clear();
+
+        comboEstado.getItems().addAll("Todos", "Nueva", "Usada");
+        comboSoporte.getItems().addAll("Todos", "Blu-Ray", "DVD");
+
+        comboEstado.getSelectionModel().select("Todos");
+        comboSoporte.getSelectionModel().select("Todos");
+    }
+
+
+    @FXML
+    private void handleFiltrar() {
+        String estado = comboEstado.getValue();
+        String soporte = comboSoporte.getValue();
+
+        if ("Todos".equals(estado)) estado = null;
+        if ("Todos".equals(soporte)) soporte = null;
+
+        listaCopias.clear();
+        listaCopias.addAll(copiaDAO.filtrarCopias(AppSession.getUsuarioActual(), estado, soporte));
+    }
+
+    @FXML
+    private void handleLimpiarFiltros() {
+        comboEstado.getSelectionModel().select("Todos");
+        comboSoporte.getSelectionModel().select("Todos");
+        cargarCopias();
     }
 
     private void cargarCopias() {
@@ -87,7 +125,7 @@ public class PrincipalController {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 copiaDAO.eliminarCopia(copiaSeleccionada);
-                cargarCopias(); // Recargar la lista
+                cargarCopias(); 
             }
         } else {
             mostrarAlerta(Alert.AlertType.WARNING, "Advertencia", "Selecciona una copia para eliminar.");
@@ -96,7 +134,6 @@ public class PrincipalController {
 
     @FXML
     private void handleAnadirCopia() {
-        // Añadir una nueva copia
         mostrarDialogoNuevaCopia();
     }
 
@@ -108,28 +145,31 @@ public class PrincipalController {
             mostrarAlerta(Alert.AlertType.ERROR, "Acceso Denegado", "Solo los administradores pueden añadir nuevas películas al catálogo.");
         }
     }
-
     private void mostrarVentanaDetalle(Copia copia) {
         Dialog<Copia> dialog = new Dialog<>();
         dialog.setTitle("Detalle y Edición de Copia");
         dialog.setHeaderText("Modificar copia de: " + copia.getTituloPelicula() + " (ID: " + copia.getId() + ")");
 
-        // Configurar el layout del diálogo
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
 
-        TextField estadoField = new TextField(copia.getEstado());
-        TextField soporteField = new TextField(copia.getSoporte());
+        ComboBox<String> estadoCombo = new ComboBox<>();
+        estadoCombo.getItems().addAll("Nueva", "Usada");
+        estadoCombo.setValue(copia.getEstado());
+
+        ComboBox<String> soporteCombo = new ComboBox<>();
+        soporteCombo.getItems().addAll("Blu-Ray", "DVD");
+        soporteCombo.setValue(copia.getSoporte());
 
         grid.add(new Label("Título Película:"), 0, 0);
         grid.add(new Label(copia.getTituloPelicula()), 1, 0);
         grid.add(new Label("Director:"), 0, 1);
         grid.add(new Label(copia.getPelicula().getDirector()), 1, 1);
         grid.add(new Label("Estado (Modificable):"), 0, 2);
-        grid.add(estadoField, 1, 2);
+        grid.add(estadoCombo, 1, 2);
         grid.add(new Label("Soporte (Modificable):"), 0, 3);
-        grid.add(soporteField, 1, 3);
+        grid.add(soporteCombo, 1, 3);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -138,11 +178,10 @@ public class PrincipalController {
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == botonGuardar) {
-                // Modificar y guardar la copia
-                copia.setEstado(estadoField.getText());
-                copia.setSoporte(soporteField.getText());
-                copiaDAO.guardarCopia(copia); // Usa guardarCopia para UPDATE
-                cargarCopias(); // Recargar la lista
+                copia.setEstado(estadoCombo.getValue());
+                copia.setSoporte(soporteCombo.getValue());
+                copiaDAO.guardarCopia(copia); 
+                cargarCopias(); 
                 return copia;
             }
             return null;
@@ -152,7 +191,6 @@ public class PrincipalController {
     }
 
     private void mostrarDialogoNuevaCopia() {
-        // Añadir una nueva copia de una película existente
         Dialog<Copia> dialog = new Dialog<>();
         dialog.setTitle("Añadir Nueva Copia");
         dialog.setHeaderText("Selecciona película y define los detalles de la copia.");
@@ -163,7 +201,6 @@ public class PrincipalController {
 
         ComboBox<Pelicula> cmbPelicula = new ComboBox<>();
         cmbPelicula.setItems(FXCollections.observableArrayList(copiaDAO.obtenerTodasLasPeliculas()));
-        // Muestra el título de la película en el ComboBox
         cmbPelicula.setCellFactory(lv -> new ListCell<Pelicula>() {
             @Override
             protected void updateItem(Pelicula item, boolean empty) {
@@ -173,17 +210,20 @@ public class PrincipalController {
         });
         cmbPelicula.setButtonCell(cmbPelicula.getCellFactory().call(null));
 
-        TextField estadoField = new TextField();
-        estadoField.setPromptText("Estado (e.g., Excelente)");
-        TextField soporteField = new TextField();
-        soporteField.setPromptText("Soporte (e.g., Blu-ray)");
+        ComboBox<String> estadoCombo = new ComboBox<>();
+        estadoCombo.getItems().addAll("Nueva", "Usada");
+        estadoCombo.setPromptText("Estado");
+
+        ComboBox<String> soporteCombo = new ComboBox<>();
+        soporteCombo.getItems().addAll("Blu-Ray", "DVD");
+        soporteCombo.setPromptText("Soporte");
 
         grid.add(new Label("Película:"), 0, 0);
         grid.add(cmbPelicula, 1, 0);
         grid.add(new Label("Estado:"), 0, 1);
-        grid.add(estadoField, 1, 1);
+        grid.add(estadoCombo, 1, 1);
         grid.add(new Label("Soporte:"), 0, 2);
-        grid.add(soporteField, 1, 2);
+        grid.add(soporteCombo, 1, 2);
 
         dialog.getDialogPane().setContent(grid);
         ButtonType botonAnadir = new ButtonType("Añadir", ButtonBar.ButtonData.OK_DONE);
@@ -194,8 +234,8 @@ public class PrincipalController {
                 Copia nuevaCopia = new Copia(
                         cmbPelicula.getValue(),
                         AppSession.getUsuarioActual(),
-                        estadoField.getText(),
-                        soporteField.getText()
+                        estadoCombo.getValue(),
+                        soporteCombo.getValue()
                 );
                 copiaDAO.guardarCopia(nuevaCopia);
                 cargarCopias();
@@ -206,7 +246,6 @@ public class PrincipalController {
     }
 
     private void mostrarDialogoNuevaPelicula() {
-        // Diálogo para añadir una nueva película (Solo Admin)
         Dialog<Pelicula> dialog = new Dialog<>();
         dialog.setTitle("Añadir Nueva Película (ADMIN)");
         dialog.setHeaderText("Introduce los datos de la nueva película para el catálogo común.");
@@ -251,7 +290,7 @@ public class PrincipalController {
                             descripcionField.getText(),
                             directorField.getText()
                     );
-                    copiaDAO.guardarPelicula(nuevaPelicula); // Reutiliza el DAO
+                    copiaDAO.guardarPelicula(nuevaPelicula); 
                     mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "Película creada: " + nuevaPelicula.getTitulo());
                 } catch (NumberFormatException e) {
                     mostrarAlerta(Alert.AlertType.ERROR, "Error", "El campo Año debe ser un número válido.");
