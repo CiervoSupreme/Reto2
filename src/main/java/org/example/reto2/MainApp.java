@@ -71,7 +71,7 @@ public class MainApp extends Application {
         URL fxmlUrl = MainApp.class.getResource(FXML_PRINCIPAL);
 
         if (fxmlUrl == null) {
-            System.err.println("¡ERROR CRÍTICO! No se pudo encontrar el archivo FXML: " + FXML_PRINCIPAL);
+            System.err.println("¡ERROR CRÍTICO!No se pudo encontrar el archivo FXML: " + FXML_PRINCIPAL);
             throw new IOException("FXML resource not found: " + FXML_PRINCIPAL);
         }
 
