@@ -1,8 +1,6 @@
 package org.example.reto2.Model;
 
-import jakarta.persistence.Entity;
-
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "usuario")

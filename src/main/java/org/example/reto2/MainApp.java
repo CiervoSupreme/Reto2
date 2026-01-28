@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-import org.example.reto2.Util.HibernateUtil;
+import org.example.reto2.Util.JPAUtil;
 
 public class MainApp extends Application {
 
@@ -19,12 +19,18 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        HibernateUtil.getSessionFactory();
+        JPAUtil.getEntityManagerFactory();
 
         primaryStage = stage;
         primaryStage.setTitle("Gestor de Colección de Películas");
 
         mostrarLogin();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        JPAUtil.shutdown();
+        super.stop();
     }
 
     /**
@@ -95,5 +101,4 @@ public class MainApp extends Application {
     public static Stage getPrimaryStage() {
         return primaryStage;
     }
-
 }

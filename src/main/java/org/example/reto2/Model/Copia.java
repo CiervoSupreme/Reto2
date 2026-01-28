@@ -1,6 +1,6 @@
 package org.example.reto2.Model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "copia")
